@@ -1,2 +1,6 @@
+[![Build Status](https://travis-ci.org/jsy1001/oirunner.png)](https://travis-ci.org/jsy1001/oirunner)
+
 # oirunner
-Tool to reconstruct images from optical interferometric data using BSMEM
+
+This project provides a tool to reconstruct images from optical
+interferometric data using BSMEM.
