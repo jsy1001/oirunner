@@ -1,4 +1,4 @@
-from subprocess import check_output
+from subprocess import run, PIPE, CalledProcessError
 # from astropy.io import fits
 import os.path
 # import numpy as np
@@ -21,15 +21,23 @@ def reconst_grey(datafile, outputfile, dim, pixelsize,
     if pixelsize is not None:
         args += ['--pixelsize=%f' % pixelsize]
     print("Running '%s'" % ' '.join(args))
-    output = check_output(args)
-    result = 'Iteration' + str(output).split('Iteration')[-1]
-    print('\n%s %s' % (outputfile, result))
+    try:
+        process = run(args, check=True, stdout=PIPE, stderr=PIPE)
+        out = process.stdout.decode('utf-8')
+        prefix = os.path.splitext(outputfile)[0]
+        with open(prefix + '-out.txt', 'w') as f:
+            f.write(out)
+        result = 'Iteration' + out.split('Iteration')[-1]
+        print('\n%s %s' % (outputfile, result))
+    except CalledProcessError as e:
+        print("FAILED: %s" % e.stderr.decode('utf-8'))
 
 
 def run_grey_basic(datafile, dim=DEFAULT_DIM, pixelsize=None,
                    modeltype=DEFAULT_MT, modelwidth=DEFAULT_MW):
-    stem = os.path.splitext(os.path.basename(datafile))[0]
-    outputfile = 'bsmem_%s.fits' % stem  # in CWD
+    dirname, basename = os.path.split(datafile)
+    stem = os.path.splitext(basename)[0]
+    outputfile = os.path.join(dirname, 'bsmem_%s.fits' % stem)
     reconst_grey(datafile, outputfile, dim, pixelsize,
                  modeltype, modelwidth)
 
