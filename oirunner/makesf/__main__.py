@@ -30,7 +30,7 @@ def makeimage(args):
         copyheader(hdulist[0], outhdu)
         outhdu.writeto(args.outputimage, overwrite=args.overwrite)
 
-        
+
 def create_parser():
     """Return new ArgumentParser instance for this script."""
     parser = argparse.ArgumentParser(
@@ -56,7 +56,6 @@ def main():
         makeimage(args)
     except AttributeError:
         parser.print_usage()
-        raise
 
 
 if __name__ == '__main__':

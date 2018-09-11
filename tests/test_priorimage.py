@@ -29,7 +29,7 @@ class PriorImageTestCase(unittest.TestCase):
         hdu = fits.PrimaryHDU(self.data)
         with self.assertRaises(KeyError):
             makesf(hdu, 2.0, 0.1)
-            
+
     def test_makesf_nonsquarepix(self):
         """abs(CDELT1) != abs(CDELT2), should fail with ValueError"""
         w = wcs.WCS(naxis=2)

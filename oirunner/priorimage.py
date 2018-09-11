@@ -78,5 +78,6 @@ def makesf(imghdu, fwhm, threshold):
     w = wcs.WCS(naxis=2)
     w.wcs.cdelt = [pixelsize * MAS_TO_DEG, pixelsize * MAS_TO_DEG]
     outhdu = fits.PrimaryHDU(data=result, header=w.to_header())
-    outhdu.header['HISTORY'] = 'makesf fwhm=%f threshold=%f' % (fwhm, threshold)
+    outhdu.header['HISTORY'] = 'makesf fwhm=%f threshold=%f' % (fwhm,
+                                                                threshold)
     return outhdu

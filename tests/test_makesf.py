@@ -29,8 +29,8 @@ class MakesfTestCase(unittest.TestCase):
         self.hdu.writeto(tempImage)
         tempImage.close()
         self.imageName = tempImage.name
-        self.tempResult = tempfile.NamedTemporaryFile(suffix='.fits', mode='wb',
-                                                      delete=False)
+        self.tempResult = tempfile.NamedTemporaryFile(suffix='.fits',
+                                                      mode='wb', delete=False)
 
     def tearDown(self):
         os.remove(self.imageName)
@@ -53,6 +53,6 @@ class MakesfTestCase(unittest.TestCase):
             for kw in COPY_KEYWORDS:
                 self.assertEqual(hdulist[0].header[kw], self.hdu.header[kw])
 
-        
+
 if __name__ == '__main__':
     unittest.main()
