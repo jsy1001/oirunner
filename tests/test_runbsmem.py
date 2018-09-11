@@ -1,7 +1,7 @@
 import unittest
 from subprocess import run, CalledProcessError
 try:
-    run(['bsmemcc', '-V'])
+    run(['bsmem', '-V'])
     HAVE_BSMEM = True
 except (OSError, CalledProcessError):
     HAVE_BSMEM = False
