@@ -1,4 +1,9 @@
-"""Make initial/prior model image for BSMEM."""
+"""Make initial/prior model image for BSMEM.
+
+Attributes:
+  COPY_KEYWORDS (List[str]): FITS header keywords copied from input file.
+
+"""
 
 import argparse
 import sys
@@ -9,7 +14,7 @@ from astropy.io import fits
 from oirunner import __version__
 from oirunner.priorimage import makesf
 
-COPY_KEYWORDS = ('HDUNAME', 'ORIGIN', 'OBJECT', 'AUTHOR', 'REFERENC')
+COPY_KEYWORDS = ['HDUNAME', 'ORIGIN', 'OBJECT', 'AUTHOR', 'REFERENC']
 
 
 def copyheader(fromhdu, tohdu):

@@ -25,10 +25,10 @@ class MakesfTestCase(unittest.TestCase):
         self.hdu.header['AUTHOR'] = 'A. Chiavassa'
         self.hdu.header['REFERENC'] = 'A&A 515, 12 (2010)'
         with tempfile.NamedTemporaryFile(suffix='.fits', mode='wb',
-                                         delete=False) as tempImage:
-            self.hdu.writeto(tempImage)
-            tempImage.close()
-            self.imageName = tempImage.name
+                                         delete=False) as tempimage:
+            self.hdu.writeto(tempimage)
+            tempimage.close()
+            self.imageName = tempimage.name
         self.tempResult = tempfile.NamedTemporaryFile(suffix='.fits',
                                                       mode='wb', delete=False)
 

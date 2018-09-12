@@ -99,21 +99,21 @@ def run_bsmem_using_image(datafile: str, outputfile: str, dim: int,
       uvmax:      Maximum uv radius to select (waves).
 
     """
-    tempImage = tempfile.NamedTemporaryFile(suffix='.fits', mode='wb',
+    tempimage = tempfile.NamedTemporaryFile(suffix='.fits', mode='wb',
                                             delete=False)
-    imagehdu.writeto(tempImage.name, overwrite=True)
-    tempImage.close()
+    imagehdu.writeto(tempimage.name, overwrite=True)
+    tempimage.close()
     args = [BSMEM, '--noui',
             '--data=%s' % datafile,
             '--clobber', '--output=%s' % outputfile,
             '--dim=%d' % dim,
             '--pixelsize=%f' % pixelsize,
-            '--sf=%s' % tempImage.name]
+            '--sf=%s' % tempimage.name]
     if uvmax is not None:
         args += ['--uvmax=%f' % uvmax]
     fullstdout = os.path.splitext(outputfile)[0] + '-out.txt'
     run_bsmem(args, fullstdout)
-    os.remove(tempImage.name)
+    os.remove(tempimage.name)
 
 
 def reconst_grey_basic(datafile: str,

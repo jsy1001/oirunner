@@ -21,8 +21,8 @@ def makesf(imagehdu: Union[fits.PrimaryHDU, fits.ImageHDU],
     """Blur and threshold image for use as BSMEM prior model.
 
     Args:
-      imagehdu: Input FITS image HDU.
-      fwhm: FWHM of Gaussian to convolve with in mas.
+      imagehdu:  Input FITS image HDU.
+      fwhm:      FWHM of Gaussian to convolve with in mas.
       threshold: Threshold relative to peak intensity.
 
     Returns:
