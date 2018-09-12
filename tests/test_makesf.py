@@ -14,8 +14,6 @@ class MakesfTestCase(unittest.TestCase):
 
     def setUp(self):
         self.parser = create_parser()
-        tempImage = tempfile.NamedTemporaryFile(suffix='.fits', mode='wb',
-                                                delete=False)
         data = np.zeros([64, 64], np.float)
         data[32, 32] = 1.0
         w = wcs.WCS(naxis=2)
@@ -26,9 +24,11 @@ class MakesfTestCase(unittest.TestCase):
         self.hdu.header['OBJECT'] = 'alf Ori'
         self.hdu.header['AUTHOR'] = 'A. Chiavassa'
         self.hdu.header['REFERENC'] = 'A&A 515, 12 (2010)'
-        self.hdu.writeto(tempImage)
-        tempImage.close()
-        self.imageName = tempImage.name
+        with tempfile.NamedTemporaryFile(suffix='.fits', mode='wb',
+                                         delete=False) as tempImage:
+            self.hdu.writeto(tempImage)
+            tempImage.close()
+            self.imageName = tempImage.name
         self.tempResult = tempfile.NamedTemporaryFile(suffix='.fits',
                                                       mode='wb', delete=False)
 

@@ -18,9 +18,11 @@ class RunBsmemTestCase(unittest.TestCase):
     def test_grey_basic(self):
         """Test basic grey reconstruction"""
         run_grey_basic(self.datafile)
-        run_grey_basic(self.datafile, pixelsize=0.2)
+        run_grey_basic(self.datafile, pixelsize=0.25)
+        run_grey_basic(self.datafile, uvmax=1.1e8)
+        run_grey_basic(self.datafile, pixelsize=0.25, uvmax=1.1e8)
 
     @unittest.skipUnless(HAVE_BSMEM, "requires bsmem")
     def test_grey_2step(self):
         """Test two-step grey reconstruction"""
-        run_grey_2step(self.datafile, pixelsize=0.15)
+        run_grey_2step(self.datafile, pixelsize=0.25)
