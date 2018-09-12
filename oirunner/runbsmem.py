@@ -1,3 +1,13 @@
+"""Python module to run BSMEM, perhaps iteratively.
+
+Attributes:
+  BSMEM (str):        Pathname of bsmem executable.
+  DEFAULT_DIM (int):  Default reconstructed image width.
+  DEFAULT_MT (int):   Default model type.
+  DEFAULT_MW (float): Default model width.
+
+"""
+
 import os.path
 import tempfile
 import logging
@@ -10,7 +20,6 @@ from .priorimage import makesf
 
 
 BSMEM = 'bsmem'
-
 DEFAULT_DIM = 128
 DEFAULT_MT = 3
 DEFAULT_MW = 10.0
@@ -113,6 +122,17 @@ def run_grey_basic(datafile: str,
                    modeltype: int = DEFAULT_MT,
                    modelwidth: float = DEFAULT_MW,
                    uvmax: float = None) -> None:
+    """Reconstruct a grey image by running bsmem once.
+
+    Args:
+      datafile:   Input OIFITS data filename.
+      pixelsize:  Reconstructed image pixel size (mas).
+      dim:        Reconstructed image width (pixels).
+      modeltype:  Initial/prior image model type (0-4).
+      modelwidth: Initial/prior image model width (mas).
+      uvmax:      Maximum uv radius to select (waves).
+
+    """
     reconst_using_model(datafile, _get_outputfile(datafile, 1), dim,
                         modeltype, modelwidth,
                         pixelsize=pixelsize, uvmax=uvmax)
@@ -126,6 +146,19 @@ def run_grey_2step(datafile: str,
                    uvmax1: float = 1.1e8,
                    fwhm: float = 1.25,
                    threshold: float = 0.05) -> None:
+    """Reconstruct a grey image by running bsmem twice.
+
+    Args:
+      datafile:   Input OIFITS data filename.
+      pixelsize:  Reconstructed image pixel size (mas).
+      dim:        Reconstructed image width (pixels).
+      modeltype:  Initial/prior image model type for 1st run (0-4).
+      modelwidth: Initial/prior image model width for 1st run (mas).
+      uvmax1:     Maximum uv radius to select for 1st run (waves).
+      fwhm:       FWHM of Gaussian to convolve 1st run output with (mas).
+      threshold:  Threshold (relative to peak) to apply to 1st run output.
+
+    """
     # :TODO: intelligent defaults for uvmax1, fwhm?
     out1file = _get_outputfile(datafile, 1)
     reconst_using_model(datafile, out1file, dim, modeltype, modelwidth,

@@ -1,3 +1,5 @@
+"""The oirunner package."""
+
 from pbr.version import VersionInfo
 
 _v = VersionInfo('oirunner').semantic_version()
