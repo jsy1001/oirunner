@@ -55,10 +55,10 @@ def run_bsmem(args: Sequence[str], fullstdout: str = None) -> None:
         raise
 
 
-def reconst_using_model(datafile: str, outputfile: str, dim:
-                        int, modeltype: int, modelwidth: float,
-                        pixelsize: float = None,
-                        uvmax: float = None) -> None:
+def run_bsmem_using_model(datafile: str, outputfile: str, dim:
+                          int, modeltype: int, modelwidth: float,
+                          pixelsize: float = None,
+                          uvmax: float = None) -> None:
     """Run bsmem using initial/prior model.
 
     Args:
@@ -85,9 +85,9 @@ def reconst_using_model(datafile: str, outputfile: str, dim:
     run_bsmem(args, fullstdout)
 
 
-def reconst_using_image(datafile: str, outputfile: str, dim: int,
-                        pixelsize: float, imagehdu: fits.PrimaryHDU,
-                        uvmax: float = None) -> None:
+def run_bsmem_using_image(datafile: str, outputfile: str, dim: int,
+                          pixelsize: float, imagehdu: fits.PrimaryHDU,
+                          uvmax: float = None) -> None:
     """Run bsmem using initial/prior image.
 
     Args:
@@ -116,12 +116,12 @@ def reconst_using_image(datafile: str, outputfile: str, dim: int,
     os.remove(tempImage.name)
 
 
-def run_grey_basic(datafile: str,
-                   pixelsize: float = None,
-                   dim: int = DEFAULT_DIM,
-                   modeltype: int = DEFAULT_MT,
-                   modelwidth: float = DEFAULT_MW,
-                   uvmax: float = None) -> None:
+def reconst_grey_basic(datafile: str,
+                       pixelsize: float = None,
+                       dim: int = DEFAULT_DIM,
+                       modeltype: int = DEFAULT_MT,
+                       modelwidth: float = DEFAULT_MW,
+                       uvmax: float = None) -> None:
     """Reconstruct a grey image by running bsmem once.
 
     Args:
@@ -133,19 +133,19 @@ def run_grey_basic(datafile: str,
       uvmax:      Maximum uv radius to select (waves).
 
     """
-    reconst_using_model(datafile, _get_outputfile(datafile, 1), dim,
-                        modeltype, modelwidth,
-                        pixelsize=pixelsize, uvmax=uvmax)
+    run_bsmem_using_model(datafile, _get_outputfile(datafile, 1), dim,
+                          modeltype, modelwidth,
+                          pixelsize=pixelsize, uvmax=uvmax)
 
 
-def run_grey_2step(datafile: str,
-                   pixelsize: float,
-                   dim: int = DEFAULT_DIM,
-                   modeltype: int = DEFAULT_MT,
-                   modelwidth: float = DEFAULT_MW,
-                   uvmax1: float = 1.1e8,
-                   fwhm: float = 1.25,
-                   threshold: float = 0.05) -> None:
+def reconst_grey_2step(datafile: str,
+                       pixelsize: float,
+                       dim: int = DEFAULT_DIM,
+                       modeltype: int = DEFAULT_MT,
+                       modelwidth: float = DEFAULT_MW,
+                       uvmax1: float = 1.1e8,
+                       fwhm: float = 1.25,
+                       threshold: float = 0.05) -> None:
     """Reconstruct a grey image by running bsmem twice.
 
     Args:
@@ -161,9 +161,9 @@ def run_grey_2step(datafile: str,
     """
     # :TODO: intelligent defaults for uvmax1, fwhm?
     out1file = _get_outputfile(datafile, 1)
-    reconst_using_model(datafile, out1file, dim, modeltype, modelwidth,
-                        pixelsize=pixelsize, uvmax=uvmax1)
+    run_bsmem_using_model(datafile, out1file, dim, modeltype, modelwidth,
+                          pixelsize=pixelsize, uvmax=uvmax1)
     with fits.open(out1file) as hdulist:
         imagehdu = makesf(hdulist[0], fwhm, threshold)
-    reconst_using_image(datafile, _get_outputfile(datafile, 2), dim, pixelsize,
-                        imagehdu)
+    run_bsmem_using_image(datafile, _get_outputfile(datafile, 2),
+                          dim, pixelsize, imagehdu)
