@@ -16,7 +16,7 @@ from subprocess import run, PIPE, CalledProcessError
 
 from astropy.io import fits
 
-from .priorimage import makesf
+from .priorimage import get_pixelsize, makesf
 
 
 BSMEM = 'bsmem'
@@ -58,7 +58,8 @@ def run_bsmem(args: Sequence[str], fullstdout: str = None) -> None:
 def run_bsmem_using_model(datafile: str, outputfile: str, dim:
                           int, modeltype: int, modelwidth: float,
                           pixelsize: float = None,
-                          uvmax: float = None) -> None:
+                          uvmax: float = None,
+                          alpha: float = None) -> None:
     """Run bsmem using initial/prior model.
 
     Args:
@@ -69,6 +70,7 @@ def run_bsmem_using_model(datafile: str, outputfile: str, dim:
       modelwidth: Initial/prior image model width (mas).
       pixelsize:  Reconstructed image pixel size (mas).
       uvmax:      Maximum uv radius to select (waves).
+      alpha:      Regularization hyperparameter.
 
     """
     args = [BSMEM, '--noui',
@@ -81,13 +83,18 @@ def run_bsmem_using_model(datafile: str, outputfile: str, dim:
         args += ['--pixelsize=%f' % pixelsize]
     if uvmax is not None:
         args += ['--uvmax=%f' % uvmax]
+    if alpha is not None:
+        args += ['--autoalpha=3', '--alpha=%f' % alpha]
+    else:
+        args += ['--autoalpha=4']
     fullstdout = os.path.splitext(outputfile)[0] + '-out.txt'
     run_bsmem(args, fullstdout)
 
 
 def run_bsmem_using_image(datafile: str, outputfile: str, dim: int,
                           pixelsize: float, imagehdu: fits.PrimaryHDU,
-                          uvmax: float = None) -> None:
+                          uvmax: float = None,
+                          alpha: float = None) -> None:
     """Run bsmem using initial/prior image.
 
     Args:
@@ -97,6 +104,7 @@ def run_bsmem_using_image(datafile: str, outputfile: str, dim: int,
       pixelsize:  Reconstructed image pixel size (mas).
       imagehdu:   FITS HDU containing initial/prior image.
       uvmax:      Maximum uv radius to select (waves).
+      alpha:      Regularization hyperparameter.
 
     """
     tempimage = tempfile.NamedTemporaryFile(suffix='.fits', mode='wb',
@@ -111,6 +119,10 @@ def run_bsmem_using_image(datafile: str, outputfile: str, dim: int,
             '--sf=%s' % tempimage.name]
     if uvmax is not None:
         args += ['--uvmax=%f' % uvmax]
+    if alpha is not None:
+        args += ['--autoalpha=3', '--alpha=%f' % alpha]
+    else:
+        args += ['--autoalpha=4']
     fullstdout = os.path.splitext(outputfile)[0] + '-out.txt'
     run_bsmem(args, fullstdout)
     os.remove(tempimage.name)
@@ -121,7 +133,8 @@ def reconst_grey_basic(datafile: str,
                        dim: int = DEFAULT_DIM,
                        modeltype: int = DEFAULT_MT,
                        modelwidth: float = DEFAULT_MW,
-                       uvmax: float = None) -> None:
+                       uvmax: float = None,
+                       alpha: float = None) -> None:
     """Reconstruct a grey image by running bsmem once.
 
     Args:
@@ -131,11 +144,33 @@ def reconst_grey_basic(datafile: str,
       modeltype:  Initial/prior image model type (0-4).
       modelwidth: Initial/prior image model width (mas).
       uvmax:      Maximum uv radius to select (waves).
+      alpha:      Regularization hyperparameter.
 
     """
     run_bsmem_using_model(datafile, _get_outputfile(datafile, 1), dim,
                           modeltype, modelwidth,
-                          pixelsize=pixelsize, uvmax=uvmax)
+                          pixelsize=pixelsize, uvmax=uvmax, alpha=alpha)
+
+
+def reconst_grey_basic_using_image(datafile: str,
+                                   imagefile: str,
+                                   uvmax: float = None,
+                                   alpha: float = None) -> None:
+    """Reconstruct a grey image by running bsmem once using a prior image.
+
+    Args:
+      datafile:   Input OIFITS data filename.
+      imagefile:  Input initial/prior FITS image.
+      uvmax:      Maximum uv radius to select (waves).
+      alpha:      Regularization hyperparameter.
+
+    """
+    with fits.open(imagefile) as hdulist:
+        imagehdu = hdulist[0]
+        dim = imagehdu.data.shape[0]
+        pixelsize = get_pixelsize(imagehdu)
+        run_bsmem_using_image(datafile, _get_outputfile(datafile, 1), dim,
+                              pixelsize, imagehdu, uvmax=uvmax, alpha=alpha)
 
 
 def reconst_grey_2step(datafile: str,
@@ -144,6 +179,7 @@ def reconst_grey_2step(datafile: str,
                        modeltype: int = DEFAULT_MT,
                        modelwidth: float = DEFAULT_MW,
                        uvmax1: float = 1.1e8,
+                       alpha: float = None,
                        fwhm: float = 1.25,
                        threshold: float = 0.05) -> None:
     """Reconstruct a grey image by running bsmem twice.
@@ -155,6 +191,7 @@ def reconst_grey_2step(datafile: str,
       modeltype:  Initial/prior image model type for 1st run (0-4).
       modelwidth: Initial/prior image model width for 1st run (mas).
       uvmax1:     Maximum uv radius to select for 1st run (waves).
+      alpha:      Regularization hyperparameter for both runs.
       fwhm:       FWHM of Gaussian to convolve 1st run output with (mas).
       threshold:  Threshold (relative to peak) to apply to 1st run output.
 
@@ -162,8 +199,38 @@ def reconst_grey_2step(datafile: str,
     # :TODO: intelligent defaults for uvmax1, fwhm?
     out1file = _get_outputfile(datafile, 1)
     run_bsmem_using_model(datafile, out1file, dim, modeltype, modelwidth,
-                          pixelsize=pixelsize, uvmax=uvmax1)
+                          pixelsize=pixelsize, uvmax=uvmax1, alpha=alpha)
     with fits.open(out1file) as hdulist:
         imagehdu = makesf(hdulist[0], fwhm, threshold)
     run_bsmem_using_image(datafile, _get_outputfile(datafile, 2),
-                          dim, pixelsize, imagehdu)
+                          dim, pixelsize, imagehdu, alpha=alpha)
+
+
+def reconst_grey_2step_using_image(datafile: str,
+                                   imagefile: str,
+                                   uvmax1: float = 1.1e8,
+                                   alpha: float = None,
+                                   fwhm: float = 1.25,
+                                   threshold: float = 0.05) -> None:
+    """Reconstruct a grey image by running bsmem twice using a prior image.
+
+    Args:
+      datafile:   Input OIFITS data filename.
+      imagefile:  Input initial/prior FITS image.
+      uvmax1:     Maximum uv radius to select for 1st run (waves).
+      alpha:      Regularization hyperparameter for both runs.
+      fwhm:       FWHM of Gaussian to convolve 1st run output with (mas).
+      threshold:  Threshold (relative to peak) to apply to 1st run output.
+
+    """
+    out1file = _get_outputfile(datafile, 1)
+    with fits.open(imagefile) as hdulist:
+        image1hdu = hdulist[0]
+        dim = image1hdu.data.shape[0]
+        pixelsize = get_pixelsize(image1hdu)
+        run_bsmem_using_image(datafile, out1file, dim,
+                              pixelsize, image1hdu, uvmax=uvmax1, alpha=alpha)
+    with fits.open(out1file) as hdulist:
+        image2hdu = makesf(hdulist[0], fwhm, threshold)
+    run_bsmem_using_image(datafile, _get_outputfile(datafile, 2),
+                          dim, pixelsize, image2hdu, alpha=alpha)

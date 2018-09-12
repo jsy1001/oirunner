@@ -16,6 +16,19 @@ from astropy import wcs
 MAS_TO_DEG = 1/3600/1000
 
 
+def get_pixelsize(imagehdu: Union[fits.PrimaryHDU, fits.ImageHDU]) -> float:
+    """Return image pixel size in milliarcseconds."""
+    try:
+        cdelt1 = imagehdu.header['CDELT1']
+        cdelt2 = imagehdu.header['CDELT2']
+    except KeyError:
+        raise KeyError("CDELT1/2 keywords missing, pixelsize unknown")
+    if abs(cdelt1) != abs(cdelt2):
+        raise ValueError("Image pixels are not square " +
+                         "(CDELT1=%f, CDELT2=%f)" % (cdelt1, cdelt2))
+    return cdelt1 / MAS_TO_DEG
+
+
 def makesf(imagehdu: Union[fits.PrimaryHDU, fits.ImageHDU],
            fwhm: float, threshold: float) -> fits.PrimaryHDU:
     """Blur and threshold image for use as BSMEM prior model.
@@ -32,24 +45,16 @@ def makesf(imagehdu: Union[fits.PrimaryHDU, fits.ImageHDU],
       KeyError, ValueError
 
     """
-    # Read image
+    # Get image attributes
     dims = imagehdu.data.shape
-    try:
-        cdelt1 = imagehdu.header['CDELT1']
-        cdelt2 = imagehdu.header['CDELT2']
-    except KeyError:
-        raise KeyError("CDELT1/2 keywords missing, pixelsize unknown")
-    if abs(cdelt1) != abs(cdelt2):
-        raise ValueError("Image pixels are not square " +
-                         "(CDELT1=%f, CDELT2=%f)" % (cdelt1, cdelt2))
-    pixelsize = cdelt1 / MAS_TO_DEG
+    pixelsize = get_pixelsize(imagehdu)
     minvalue = imagehdu.data.min()
     maxvalue = imagehdu.data.max()
     logging.info('Image pixelsize = %f mas' % pixelsize)
     logging.info('Image min = %g' % minvalue)
     logging.info('Image max = %g' % maxvalue)
 
-    # Parameters:
+    # Initialize parameters
     sigma = fwhm / pixelsize / 2.3548
     lowest = threshold * maxvalue
     blank = 1e-8

@@ -9,23 +9,37 @@ try:
 except (OSError, CalledProcessError):
     HAVE_BSMEM = False
 
-from oirunner.runbsmem import reconst_grey_basic, reconst_grey_2step
+import oirunner.runbsmem as runbs
 
 DATAFILE = 'tests/2004contest1.oifits'
+IMAGEFILE = 'tests/gauss10.fits'
 
 
 class RunBsmemTestCase(unittest.TestCase):
 
     @unittest.skipUnless(HAVE_BSMEM, "requires bsmem")
     def test_grey_basic(self):
-        """Test basic grey reconstruction"""
+        """Test grey reconstruction"""
         with tempfile.TemporaryDirectory() as dirname:
             tempdatafile = os.path.join(dirname, os.path.basename(DATAFILE))
             copyfile(DATAFILE, tempdatafile)
-            reconst_grey_basic(tempdatafile)
-            reconst_grey_basic(tempdatafile, pixelsize=0.25)
-            reconst_grey_basic(tempdatafile, uvmax=1.1e8)
-            reconst_grey_basic(tempdatafile, pixelsize=0.25, uvmax=1.1e8)
+            runbs.reconst_grey_basic(tempdatafile)
+            runbs.reconst_grey_basic(tempdatafile, pixelsize=0.25)
+            runbs.reconst_grey_basic(tempdatafile, uvmax=1.1e8)
+            runbs.reconst_grey_basic(tempdatafile, alpha=4000.)
+            runbs.reconst_grey_basic(tempdatafile, pixelsize=0.25,
+                                     uvmax=1.1e8, alpha=4000.)
+
+    @unittest.skipUnless(HAVE_BSMEM, "requires bsmem")
+    def test_grey_basic_using_image(self):
+        """Test grey reconstruction using a prior image"""
+        with tempfile.TemporaryDirectory() as dirname:
+            tempdatafile = os.path.join(dirname, os.path.basename(DATAFILE))
+            copyfile(DATAFILE, tempdatafile)
+            runbs.reconst_grey_basic_using_image(tempdatafile, IMAGEFILE)
+            runbs.reconst_grey_basic(tempdatafile, uvmax=1.1e8)
+            runbs.reconst_grey_basic(tempdatafile, alpha=4000.)
+            runbs.reconst_grey_basic(tempdatafile, uvmax=1.1e8, alpha=4000.)
 
     @unittest.skipUnless(HAVE_BSMEM, "requires bsmem")
     def test_grey_2step(self):
@@ -33,4 +47,12 @@ class RunBsmemTestCase(unittest.TestCase):
         with tempfile.TemporaryDirectory() as dirname:
             tempdatafile = os.path.join(dirname, os.path.basename(DATAFILE))
             copyfile(DATAFILE, tempdatafile)
-            reconst_grey_2step(tempdatafile, 0.25)
+            runbs.reconst_grey_2step(tempdatafile, 0.25)
+
+    @unittest.skipUnless(HAVE_BSMEM, "requires bsmem")
+    def test_grey_2step_using_image(self):
+        """Test two-step grey reconstruction using a prior image"""
+        with tempfile.TemporaryDirectory() as dirname:
+            tempdatafile = os.path.join(dirname, os.path.basename(DATAFILE))
+            copyfile(DATAFILE, tempdatafile)
+            runbs.reconst_grey_2step_using_image(tempdatafile, IMAGEFILE)
