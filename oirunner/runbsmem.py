@@ -134,7 +134,7 @@ def reconst_grey_basic(datafile: str,
                        modeltype: int = DEFAULT_MT,
                        modelwidth: float = DEFAULT_MW,
                        uvmax: float = None,
-                       alpha: float = None) -> None:
+                       alpha: float = None) -> str:
     """Reconstruct a grey image by running bsmem once.
 
     Args:
@@ -146,16 +146,21 @@ def reconst_grey_basic(datafile: str,
       uvmax:      Maximum uv radius to select (waves).
       alpha:      Regularization hyperparameter.
 
+    Returns:
+       Output FITS filename.
+
     """
-    run_bsmem_using_model(datafile, _get_outputfile(datafile, 1), dim,
+    outputfile = _get_outputfile(datafile, 1)
+    run_bsmem_using_model(datafile, outputfile, dim,
                           modeltype, modelwidth,
                           pixelsize=pixelsize, uvmax=uvmax, alpha=alpha)
+    return outputfile
 
 
 def reconst_grey_basic_using_image(datafile: str,
                                    imagefile: str,
                                    uvmax: float = None,
-                                   alpha: float = None) -> None:
+                                   alpha: float = None) -> str:
     """Reconstruct a grey image by running bsmem once using a prior image.
 
     Args:
@@ -164,13 +169,18 @@ def reconst_grey_basic_using_image(datafile: str,
       uvmax:      Maximum uv radius to select (waves).
       alpha:      Regularization hyperparameter.
 
+    Returns:
+       Output FITS filename.
+
     """
+    outputfile = _get_outputfile(datafile, 1)
     with fits.open(imagefile) as hdulist:
         imagehdu = hdulist[0]
         dim = imagehdu.data.shape[0]
         pixelsize = get_pixelsize(imagehdu)
-        run_bsmem_using_image(datafile, _get_outputfile(datafile, 1), dim,
-                              pixelsize, imagehdu, uvmax=uvmax, alpha=alpha)
+        run_bsmem_using_image(datafile, outputfile, dim, pixelsize, imagehdu,
+                              uvmax=uvmax, alpha=alpha)
+    return outputfile
 
 
 def reconst_grey_2step(datafile: str,
@@ -181,7 +191,7 @@ def reconst_grey_2step(datafile: str,
                        uvmax1: float = 1.1e8,
                        alpha: float = None,
                        fwhm: float = 1.25,
-                       threshold: float = 0.05) -> None:
+                       threshold: float = 0.05) -> str:
     """Reconstruct a grey image by running bsmem twice.
 
     Args:
@@ -195,6 +205,9 @@ def reconst_grey_2step(datafile: str,
       fwhm:       FWHM of Gaussian to convolve 1st run output with (mas).
       threshold:  Threshold (relative to peak) to apply to 1st run output.
 
+    Returns:
+       Output FITS filename.
+
     """
     # :TODO: intelligent defaults for uvmax1, fwhm?
     out1file = _get_outputfile(datafile, 1)
@@ -202,8 +215,10 @@ def reconst_grey_2step(datafile: str,
                           pixelsize=pixelsize, uvmax=uvmax1, alpha=alpha)
     with fits.open(out1file) as hdulist:
         imagehdu = makesf(hdulist[0], fwhm, threshold)
-    run_bsmem_using_image(datafile, _get_outputfile(datafile, 2),
-                          dim, pixelsize, imagehdu, alpha=alpha)
+    out2file = _get_outputfile(datafile, 2)
+    run_bsmem_using_image(datafile, out2file, dim, pixelsize, imagehdu,
+                          alpha=alpha)
+    return out2file
 
 
 def reconst_grey_2step_using_image(datafile: str,
@@ -211,7 +226,7 @@ def reconst_grey_2step_using_image(datafile: str,
                                    uvmax1: float = 1.1e8,
                                    alpha: float = None,
                                    fwhm: float = 1.25,
-                                   threshold: float = 0.05) -> None:
+                                   threshold: float = 0.05) -> str:
     """Reconstruct a grey image by running bsmem twice using a prior image.
 
     Args:
@@ -222,15 +237,20 @@ def reconst_grey_2step_using_image(datafile: str,
       fwhm:       FWHM of Gaussian to convolve 1st run output with (mas).
       threshold:  Threshold (relative to peak) to apply to 1st run output.
 
+    Returns:
+       Output FITS filename.
+
     """
     out1file = _get_outputfile(datafile, 1)
     with fits.open(imagefile) as hdulist:
         image1hdu = hdulist[0]
         dim = image1hdu.data.shape[0]
         pixelsize = get_pixelsize(image1hdu)
-        run_bsmem_using_image(datafile, out1file, dim,
-                              pixelsize, image1hdu, uvmax=uvmax1, alpha=alpha)
+        run_bsmem_using_image(datafile, out1file, dim, pixelsize, image1hdu,
+                              uvmax=uvmax1, alpha=alpha)
+    out2file = _get_outputfile(datafile, 2)
     with fits.open(out1file) as hdulist:
         image2hdu = makesf(hdulist[0], fwhm, threshold)
-    run_bsmem_using_image(datafile, _get_outputfile(datafile, 2),
-                          dim, pixelsize, image2hdu, alpha=alpha)
+        run_bsmem_using_image(datafile, out2file, dim, pixelsize, image2hdu,
+                              alpha=alpha)
+    return out2file

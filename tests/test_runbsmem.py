@@ -23,12 +23,17 @@ class RunBsmemTestCase(unittest.TestCase):
         with tempfile.TemporaryDirectory() as dirname:
             tempdatafile = os.path.join(dirname, os.path.basename(DATAFILE))
             copyfile(DATAFILE, tempdatafile)
-            runbs.reconst_grey_basic(tempdatafile)
-            runbs.reconst_grey_basic(tempdatafile, pixelsize=0.25)
-            runbs.reconst_grey_basic(tempdatafile, uvmax=1.1e8)
-            runbs.reconst_grey_basic(tempdatafile, alpha=4000.)
-            runbs.reconst_grey_basic(tempdatafile, pixelsize=0.25,
-                                     uvmax=1.1e8, alpha=4000.)
+            out = runbs.reconst_grey_basic(tempdatafile)
+            self.assertTrue(os.path.exists(out))
+            out = runbs.reconst_grey_basic(tempdatafile, pixelsize=0.25)
+            self.assertTrue(os.path.exists(out))
+            out = runbs.reconst_grey_basic(tempdatafile, uvmax=1.1e8)
+            self.assertTrue(os.path.exists(out))
+            out = runbs.reconst_grey_basic(tempdatafile, alpha=4000.)
+            self.assertTrue(os.path.exists(out))
+            out = runbs.reconst_grey_basic(tempdatafile, pixelsize=0.25,
+                                           uvmax=1.1e8, alpha=4000.)
+            self.assertTrue(os.path.exists(out))
 
     @unittest.skipUnless(HAVE_BSMEM, "requires bsmem")
     def test_grey_basic_using_image(self):
@@ -36,10 +41,15 @@ class RunBsmemTestCase(unittest.TestCase):
         with tempfile.TemporaryDirectory() as dirname:
             tempdatafile = os.path.join(dirname, os.path.basename(DATAFILE))
             copyfile(DATAFILE, tempdatafile)
-            runbs.reconst_grey_basic_using_image(tempdatafile, IMAGEFILE)
-            runbs.reconst_grey_basic(tempdatafile, uvmax=1.1e8)
-            runbs.reconst_grey_basic(tempdatafile, alpha=4000.)
-            runbs.reconst_grey_basic(tempdatafile, uvmax=1.1e8, alpha=4000.)
+            out = runbs.reconst_grey_basic_using_image(tempdatafile, IMAGEFILE)
+            self.assertTrue(os.path.exists(out))
+            out = runbs.reconst_grey_basic(tempdatafile, uvmax=1.1e8)
+            self.assertTrue(os.path.exists(out))
+            out = runbs.reconst_grey_basic(tempdatafile, alpha=4000.)
+            self.assertTrue(os.path.exists(out))
+            out = runbs.reconst_grey_basic(tempdatafile,
+                                           uvmax=1.1e8, alpha=4000.)
+            self.assertTrue(os.path.exists(out))
 
     @unittest.skipUnless(HAVE_BSMEM, "requires bsmem")
     def test_grey_2step(self):
@@ -47,7 +57,8 @@ class RunBsmemTestCase(unittest.TestCase):
         with tempfile.TemporaryDirectory() as dirname:
             tempdatafile = os.path.join(dirname, os.path.basename(DATAFILE))
             copyfile(DATAFILE, tempdatafile)
-            runbs.reconst_grey_2step(tempdatafile, 0.25)
+            out = runbs.reconst_grey_2step(tempdatafile, 0.25)
+            self.assertTrue(os.path.exists(out))
 
     @unittest.skipUnless(HAVE_BSMEM, "requires bsmem")
     def test_grey_2step_using_image(self):
@@ -55,4 +66,5 @@ class RunBsmemTestCase(unittest.TestCase):
         with tempfile.TemporaryDirectory() as dirname:
             tempdatafile = os.path.join(dirname, os.path.basename(DATAFILE))
             copyfile(DATAFILE, tempdatafile)
-            runbs.reconst_grey_2step_using_image(tempdatafile, IMAGEFILE)
+            out = runbs.reconst_grey_2step_using_image(tempdatafile, IMAGEFILE)
+            self.assertTrue(os.path.exists(out))
