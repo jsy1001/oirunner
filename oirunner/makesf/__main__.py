@@ -54,7 +54,7 @@ def create_parser():
 
 
 def main():
-    """Main function."""
+    """Run application."""
     parser = create_parser()
     args = parser.parse_args()
     try:
