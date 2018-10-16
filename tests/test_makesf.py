@@ -52,6 +52,13 @@ class MakesfTestCase(unittest.TestCase):
         with fits.open(self.tempResult.name) as hdulist:
             for kw in COPY_KEYWORDS:
                 self.assertEqual(hdulist[0].header[kw], self.hdu.header[kw])
+        args = self.parser.parse_args(["--overwrite", "--blank=0.0001",
+                                       self.imageName, self.tempResult.name,
+                                       "2.0", "0.1"])
+        makeimage(args)
+        with fits.open(self.tempResult.name) as hdulist:
+            for kw in COPY_KEYWORDS:
+                self.assertEqual(hdulist[0].header[kw], self.hdu.header[kw])
 
 
 if __name__ == '__main__':

@@ -30,13 +30,15 @@ def get_pixelsize(imagehdu: Union[fits.PrimaryHDU, fits.ImageHDU]) -> float:
 
 
 def makesf(imagehdu: Union[fits.PrimaryHDU, fits.ImageHDU],
-           fwhm: float, threshold: float) -> fits.PrimaryHDU:
+           fwhm: float, threshold: float,
+           blank: float = 1e-8) -> fits.PrimaryHDU:
     """Blur and threshold image for use as BSMEM prior model.
 
     Args:
       imagehdu:  Input FITS image HDU.
       fwhm:      FWHM of Gaussian to convolve with in mas.
       threshold: Threshold relative to peak intensity.
+      blank:     Replacement value for pixels below threshold.
 
     Returns:
       Output FITS image HDU.
@@ -57,7 +59,6 @@ def makesf(imagehdu: Union[fits.PrimaryHDU, fits.ImageHDU],
     # Initialize parameters
     sigma = fwhm / pixelsize / 2.3548
     lowest = threshold * maxvalue
-    blank = 1e-8
 
     # Generate Gaussian
     bw = int(6*sigma)
@@ -75,7 +76,7 @@ def makesf(imagehdu: Union[fits.PrimaryHDU, fits.ImageHDU],
     result = result * maxvalue / result.max()
 
     # Threshold
-    logging.info('Thresholding image at %f...' % threshold)
+    logging.info('Thresholding image at %f (blank=%f)...' % (threshold, blank))
     for i in range(dims[0]):
         for j in range(dims[1]):
             if result[i, j] < lowest:

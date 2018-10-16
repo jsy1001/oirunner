@@ -31,7 +31,11 @@ def makeimage(args):
     if not args.overwrite and os.path.exists(args.outputimage):
         sys.exit("Not creating '%s' as it already exists." % args.outputimage)
     with fits.open(args.inputimage) as hdulist:
-        outhdu = makesf(hdulist[0], args.fwhm, args.threshold)
+        if args.blank is None:
+            outhdu = makesf(hdulist[0], args.fwhm, args.threshold)
+        else:
+            outhdu = makesf(hdulist[0], args.fwhm, args.threshold,
+                            blank=args.blank)
         copyheader(hdulist[0], outhdu)
         outhdu.writeto(args.outputimage, overwrite=args.overwrite)
 
@@ -44,6 +48,8 @@ def create_parser():
                         action='version', version=__version__)
     parser.add_argument('-o', '--overwrite', action='store_true',
                         help='Overwrite existing file')
+    parser.add_argument('-b', '--blank', type=float,
+                        help='Replacement value for pixels below threshold')
     parser.add_argument('inputimage', help='Input FITS image')
     parser.add_argument('outputimage', help='Output FITS image')
     parser.add_argument('fwhm', type=float,
