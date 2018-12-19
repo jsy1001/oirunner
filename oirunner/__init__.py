@@ -1,6 +1,8 @@
 """The oirunner package."""
 
-from pbr.version import VersionInfo
-
-_v = VersionInfo('oirunner').semantic_version()
-__version__ = _v.release_string()
+from pkg_resources import get_distribution, DistributionNotFound
+try:
+    __version__ = get_distribution(__name__).version
+except DistributionNotFound:
+    # package is not installed
+    pass
