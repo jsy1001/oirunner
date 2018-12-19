@@ -5,6 +5,7 @@
 #    pip-compile --output-file requirements-dev.txt requirements-dev.in
 #
 click==7.0                # via pip-tools
+flake8-assertive==1.0.1
 flake8-docstrings==1.3.0
 flake8-polyfill==1.0.2    # via flake8-docstrings, pep8-naming
 flake8==3.6.0
