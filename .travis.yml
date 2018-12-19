@@ -3,8 +3,9 @@ python:
   - "3.5"
   - "3.6"
 install:
+  - "pip install setuptools_scm"
   - "pip install -r requirements-dev.txt"
   - "pip install -r requirements.txt"
 script:
   - "flake8 ."
-  - "python -m unittest"
+  - "python setup.py test"
