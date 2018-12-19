@@ -7,7 +7,7 @@ install:
 requirements-dev.txt: requirements-dev.in
 	pip-compile --output-file $@ $<
 
-requirements.txt: requirements.in setup.py
+requirements.txt: setup.py
 	pip-compile --output-file $@ $<
 
 
