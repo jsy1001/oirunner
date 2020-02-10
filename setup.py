@@ -38,7 +38,7 @@ setup(
 
     packages=find_packages(exclude=['docs', 'tests']),
 
-    install_requires=['numpy', 'astropy>=1.3', 'scipy'],
+    install_requires=['numpy', 'astropy>=1.3', 'scipy<1.4'],
 
     entry_points={
         'console_scripts': [
