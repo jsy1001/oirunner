@@ -6,6 +6,7 @@
 #
 appdirs==1.4.3            # via virtualenv
 click==7.0                # via pip-tools
+coverage==5.3
 entrypoints==0.3          # via flake8
 filelock==3.0.12          # via tox, virtualenv
 flake8-assertive==1.2.1

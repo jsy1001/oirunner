@@ -5,3 +5,4 @@ flake8-assertive
 flake8-docstrings
 pep8-naming
 tox
+coverage
