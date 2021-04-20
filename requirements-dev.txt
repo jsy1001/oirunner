@@ -4,30 +4,63 @@
 #
 #    pip-compile --output-file=requirements-dev.txt requirements-dev.in
 #
-appdirs==1.4.3            # via virtualenv
-click==7.0                # via pip-tools
+appdirs==1.4.3
+    # via virtualenv
+click==7.0
+    # via pip-tools
 coverage==5.3
-entrypoints==0.3          # via flake8
-filelock==3.0.12          # via tox, virtualenv
+    # via -r requirements-dev.in
+entrypoints==0.3
+    # via flake8
+filelock==3.0.12
+    # via
+    #   tox
+    #   virtualenv
 flake8-assertive==1.2.1
+    # via -r requirements-dev.in
 flake8-docstrings==1.5.0
-flake8-polyfill==1.0.2    # via pep8-naming
+    # via -r requirements-dev.in
+flake8-polyfill==1.0.2
+    # via pep8-naming
 flake8==3.7.9
-importlib-metadata==1.5.0  # via pluggy, tox, virtualenv
-mccabe==0.6.1             # via flake8
-packaging==20.1           # via tox
+    # via
+    #   -r requirements-dev.in
+    #   flake8-assertive
+    #   flake8-docstrings
+    #   flake8-polyfill
+mccabe==0.6.1
+    # via flake8
+packaging==20.1
+    # via tox
 pep8-naming==0.9.1
+    # via -r requirements-dev.in
 pip-tools==4.4.1
-pluggy==0.13.1            # via tox
-py==1.8.1                 # via tox
-pycodestyle==2.5.0        # via flake8
-pydocstyle==5.0.2         # via flake8-docstrings
-pyflakes==2.1.1           # via flake8
-pyparsing==2.4.6          # via packaging
+    # via -r requirements-dev.in
+pluggy==0.13.1
+    # via tox
+py==1.10.0
+    # via tox
+pycodestyle==2.5.0
+    # via flake8
+pydocstyle==5.0.2
+    # via flake8-docstrings
+pyflakes==2.1.1
+    # via flake8
+pyparsing==2.4.6
+    # via packaging
 setuptools-scm==3.4.3
-six==1.14.0               # via packaging, pip-tools, tox, virtualenv
-snowballstemmer==2.0.0    # via pydocstyle
-toml==0.10.0              # via tox
+    # via -r requirements-dev.in
+six==1.14.0
+    # via
+    #   packaging
+    #   pip-tools
+    #   tox
+    #   virtualenv
+snowballstemmer==2.0.0
+    # via pydocstyle
+toml==0.10.0
+    # via tox
 tox==3.14.3
-virtualenv==20.0.1        # via tox
-zipp==2.2.0               # via importlib-metadata
+    # via -r requirements-dev.in
+virtualenv==20.0.1
+    # via tox
