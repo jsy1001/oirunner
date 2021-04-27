@@ -10,7 +10,7 @@ from oirunner.priorimage import makesf, MAS_TO_DEG
 class PriorImageTestCase(unittest.TestCase):
 
     def setUp(self):
-        self.data = np.zeros([64, 64], np.float)
+        self.data = np.zeros([64, 64], float)
         self.data[31, 32] = 0.04
         self.data[32, 32] = 1.0
         self.data[33, 32] = 0.06

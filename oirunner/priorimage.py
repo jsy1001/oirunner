@@ -62,7 +62,7 @@ def makesf(imagehdu: Union[fits.PrimaryHDU, fits.ImageHDU],
 
     # Generate Gaussian
     bw = int(6*sigma)
-    blur = np.zeros((bw, bw), np.float)
+    blur = np.zeros((bw, bw), float)
     for i in range(bw):
         for j in range(bw):
             blur[i, j] = np.exp(-((i - bw/2)**2 + (j - bw/2)**2) /

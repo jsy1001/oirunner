@@ -14,7 +14,7 @@ class MakesfTestCase(unittest.TestCase):
 
     def setUp(self):
         self.parser = create_parser()
-        data = np.zeros([64, 64], np.float)
+        data = np.zeros([64, 64], float)
         data[32, 32] = 1.0
         w = wcs.WCS(naxis=2)
         w.wcs.cdelt = [0.5 * MAS_TO_DEG, -0.5 * MAS_TO_DEG]
