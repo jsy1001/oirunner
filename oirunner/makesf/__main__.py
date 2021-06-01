@@ -14,7 +14,7 @@ from astropy.io import fits
 from oirunner import __version__
 from oirunner.priorimage import makesf
 
-COPY_KEYWORDS = ['HDUNAME', 'ORIGIN', 'OBJECT', 'AUTHOR', 'REFERENC']
+COPY_KEYWORDS = ["HDUNAME", "ORIGIN", "OBJECT", "AUTHOR", "REFERENC"]
 
 
 def copyheader(fromhdu, tohdu):
@@ -34,28 +34,29 @@ def makeimage(args):
         if args.blank is None:
             outhdu = makesf(hdulist[0], args.fwhm, args.threshold)
         else:
-            outhdu = makesf(hdulist[0], args.fwhm, args.threshold,
-                            blank=args.blank)
+            outhdu = makesf(hdulist[0], args.fwhm, args.threshold, blank=args.blank)
         copyheader(hdulist[0], outhdu)
         outhdu.writeto(args.outputimage, overwrite=args.overwrite)
 
 
 def create_parser():
     """Return new ArgumentParser instance for this script."""
-    parser = argparse.ArgumentParser(
-        description='Make initial/prior image for BSMEM')
-    parser.add_argument('-V', '--version',
-                        action='version', version=__version__)
-    parser.add_argument('-o', '--overwrite', action='store_true',
-                        help='Overwrite existing file')
-    parser.add_argument('-b', '--blank', type=float,
-                        help='Replacement value for pixels below threshold')
-    parser.add_argument('inputimage', help='Input FITS image')
-    parser.add_argument('outputimage', help='Output FITS image')
-    parser.add_argument('fwhm', type=float,
-                        help='FWHM of Gaussian to convolve with in mas')
-    parser.add_argument('threshold', type=float,
-                        help='Threshold relative to peak intensity')
+    parser = argparse.ArgumentParser(description="Make initial/prior image for BSMEM")
+    parser.add_argument("-V", "--version", action="version", version=__version__)
+    parser.add_argument(
+        "-o", "--overwrite", action="store_true", help="Overwrite existing file"
+    )
+    parser.add_argument(
+        "-b", "--blank", type=float, help="Replacement value for pixels below threshold"
+    )
+    parser.add_argument("inputimage", help="Input FITS image")
+    parser.add_argument("outputimage", help="Output FITS image")
+    parser.add_argument(
+        "fwhm", type=float, help="FWHM of Gaussian to convolve with in mas"
+    )
+    parser.add_argument(
+        "threshold", type=float, help="Threshold relative to peak intensity"
+    )
     return parser
 
 
@@ -69,5 +70,5 @@ def main():
         parser.print_usage()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

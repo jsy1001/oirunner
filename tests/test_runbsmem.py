@@ -5,19 +5,18 @@ from shutil import copyfile
 from subprocess import CalledProcessError, run
 
 try:
-    run(['bsmem', '-V'])
+    run(["bsmem", "-V"])
     HAVE_BSMEM = True
 except (OSError, CalledProcessError):
     HAVE_BSMEM = False
 
 import oirunner.runbsmem as runbs
 
-DATAFILE = 'tests/2004contest1.oifits'
-IMAGEFILE = 'tests/gauss10.fits'
+DATAFILE = "tests/2004contest1.oifits"
+IMAGEFILE = "tests/gauss10.fits"
 
 
 class RunBsmemTestCase(unittest.TestCase):
-
     @unittest.skipUnless(HAVE_BSMEM, "requires bsmem")
     def test_grey_basic(self):
         """Test grey reconstruction"""
@@ -30,10 +29,11 @@ class RunBsmemTestCase(unittest.TestCase):
             self.assertTrue(os.path.exists(out))
             out = runbs.reconst_grey_basic(tempdatafile, uvmax=1.1e8)
             self.assertTrue(os.path.exists(out))
-            out = runbs.reconst_grey_basic(tempdatafile, alpha=4000.)
+            out = runbs.reconst_grey_basic(tempdatafile, alpha=4000.0)
             self.assertTrue(os.path.exists(out))
-            out = runbs.reconst_grey_basic(tempdatafile, pixelsize=0.25,
-                                           uvmax=1.1e8, alpha=4000.)
+            out = runbs.reconst_grey_basic(
+                tempdatafile, pixelsize=0.25, uvmax=1.1e8, alpha=4000.0
+            )
             self.assertTrue(os.path.exists(out))
 
     @unittest.skipUnless(HAVE_BSMEM, "requires bsmem")
@@ -46,10 +46,9 @@ class RunBsmemTestCase(unittest.TestCase):
             self.assertTrue(os.path.exists(out))
             out = runbs.reconst_grey_basic(tempdatafile, uvmax=1.1e8)
             self.assertTrue(os.path.exists(out))
-            out = runbs.reconst_grey_basic(tempdatafile, alpha=4000.)
+            out = runbs.reconst_grey_basic(tempdatafile, alpha=4000.0)
             self.assertTrue(os.path.exists(out))
-            out = runbs.reconst_grey_basic(tempdatafile,
-                                           uvmax=1.1e8, alpha=4000.)
+            out = runbs.reconst_grey_basic(tempdatafile, uvmax=1.1e8, alpha=4000.0)
             self.assertTrue(os.path.exists(out))
 
     @unittest.skipUnless(HAVE_BSMEM, "requires bsmem")

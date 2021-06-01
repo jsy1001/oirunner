@@ -9,7 +9,6 @@ from oirunner.priorimage import MAS_TO_DEG, makesf
 
 
 class PriorImageTestCase(unittest.TestCase):
-
     def setUp(self):
         self.data = np.zeros([64, 64], float)
         self.data[31, 32] = 0.04
@@ -25,8 +24,8 @@ class PriorImageTestCase(unittest.TestCase):
         self.assertEqual(outhdu.data.shape, self.data.shape)
         self.assertAlmostEqual(outhdu.data.max(), self.data.max())
         self.assertTrue(np.all(outhdu.data >= 0.0025))
-        self.assertAlmostEqual(outhdu.header['CDELT1'], w.wcs.cdelt[0])
-        self.assertAlmostEqual(outhdu.header['CDELT2'], w.wcs.cdelt[1])
+        self.assertAlmostEqual(outhdu.header["CDELT1"], w.wcs.cdelt[0])
+        self.assertAlmostEqual(outhdu.header["CDELT2"], w.wcs.cdelt[1])
 
     def test_makesf_nopixsize(self):
         """CDELT1/2 keywords missing, should fail with KeyError"""
