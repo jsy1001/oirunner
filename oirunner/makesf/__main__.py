@@ -6,8 +6,8 @@ Attributes:
 """
 
 import argparse
-import sys
 import os.path
+import sys
 
 from astropy.io import fits
 

@@ -3,6 +3,7 @@ pip-tools
 flake8
 flake8-assertive
 flake8-docstrings
+flake8-import-order
 pep8-naming
 tox
 coverage

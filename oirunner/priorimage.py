@@ -8,10 +8,12 @@ Attributes:
 import logging
 from typing import Union
 
-import numpy as np
-import scipy.signal
-from astropy.io import fits
 from astropy import wcs
+from astropy.io import fits
+
+import numpy as np
+
+import scipy.signal
 
 MAS_TO_DEG = 1/3600/1000
 

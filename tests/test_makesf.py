@@ -1,13 +1,14 @@
-import unittest
 import os
 import tempfile
+import unittest
+
+from astropy import wcs
+from astropy.io import fits
 
 import numpy as np
-from astropy.io import fits
-from astropy import wcs
 
+from oirunner.makesf.__main__ import COPY_KEYWORDS, create_parser, makeimage
 from oirunner.priorimage import MAS_TO_DEG
-from oirunner.makesf.__main__ import create_parser, makeimage, COPY_KEYWORDS
 
 
 class MakesfTestCase(unittest.TestCase):

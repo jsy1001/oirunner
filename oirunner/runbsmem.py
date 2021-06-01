@@ -8,11 +8,11 @@ Attributes:
 
 """
 
+import logging
 import os.path
 import tempfile
-import logging
+from subprocess import CalledProcessError, PIPE, run
 from typing import Sequence
-from subprocess import run, PIPE, CalledProcessError
 
 from astropy.io import fits
 

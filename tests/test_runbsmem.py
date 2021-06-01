@@ -1,8 +1,9 @@
-import unittest
-import tempfile
 import os.path
+import tempfile
+import unittest
 from shutil import copyfile
-from subprocess import run, CalledProcessError
+from subprocess import CalledProcessError, run
+
 try:
     run(['bsmem', '-V'])
     HAVE_BSMEM = True

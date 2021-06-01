@@ -1,10 +1,11 @@
 import unittest
 
-from astropy.io import fits
 from astropy import wcs
+from astropy.io import fits
+
 import numpy as np
 
-from oirunner.priorimage import makesf, MAS_TO_DEG
+from oirunner.priorimage import MAS_TO_DEG, makesf
 
 
 class PriorImageTestCase(unittest.TestCase):
