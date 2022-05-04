@@ -27,12 +27,18 @@ class RunBsmemTestCase(unittest.TestCase):
             self.assertTrue(os.path.exists(out))
             out = runbs.reconst_grey_basic(tempdatafile, pixelsize=0.25)
             self.assertTrue(os.path.exists(out))
+            out = runbs.reconst_grey_basic(tempdatafile, wav=(500.0, 600.0))
+            self.assertTrue(os.path.exists(out))
             out = runbs.reconst_grey_basic(tempdatafile, uvmax=1.1e8)
             self.assertTrue(os.path.exists(out))
             out = runbs.reconst_grey_basic(tempdatafile, alpha=4000.0)
             self.assertTrue(os.path.exists(out))
             out = runbs.reconst_grey_basic(
-                tempdatafile, pixelsize=0.25, uvmax=1.1e8, alpha=4000.0
+                tempdatafile,
+                pixelsize=0.25,
+                wav=(500.0, 600.0),
+                uvmax=1.1e8,
+                alpha=4000.0,
             )
             self.assertTrue(os.path.exists(out))
 
@@ -44,11 +50,21 @@ class RunBsmemTestCase(unittest.TestCase):
             copyfile(DATAFILE, tempdatafile)
             out = runbs.reconst_grey_basic_using_image(tempdatafile, IMAGEFILE)
             self.assertTrue(os.path.exists(out))
-            out = runbs.reconst_grey_basic(tempdatafile, uvmax=1.1e8)
+            out = runbs.reconst_grey_basic_using_image(
+                tempdatafile, IMAGEFILE, wav=(500.0, 600.0)
+            )
             self.assertTrue(os.path.exists(out))
-            out = runbs.reconst_grey_basic(tempdatafile, alpha=4000.0)
+            out = runbs.reconst_grey_basic_using_image(
+                tempdatafile, IMAGEFILE, uvmax=1.1e8
+            )
             self.assertTrue(os.path.exists(out))
-            out = runbs.reconst_grey_basic(tempdatafile, uvmax=1.1e8, alpha=4000.0)
+            out = runbs.reconst_grey_basic_using_image(
+                tempdatafile, IMAGEFILE, alpha=4000.0
+            )
+            self.assertTrue(os.path.exists(out))
+            out = runbs.reconst_grey_basic_using_image(
+                tempdatafile, IMAGEFILE, wav=(500.0, 600.0), uvmax=1.1e8, alpha=4000.0
+            )
             self.assertTrue(os.path.exists(out))
 
     @unittest.skipUnless(HAVE_BSMEM, "requires bsmem")
