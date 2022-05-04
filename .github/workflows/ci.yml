@@ -17,6 +17,8 @@ jobs:
         run: pip install tox
       - name: Lint with flake8
         run: tox -e flake8
+      - name: Lint with mypy
+        run: tox -e mypy
 
   tests:
 

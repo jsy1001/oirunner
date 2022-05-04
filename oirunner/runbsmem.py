@@ -9,10 +9,10 @@ Attributes:
 """
 
 import logging
-import os.path
+import os
 import tempfile
 from subprocess import CalledProcessError, PIPE, run
-from typing import Sequence
+from typing import Optional, Sequence
 
 from astropy.io import fits
 
@@ -31,7 +31,7 @@ def _get_outputfile(datafile: str, iteration: int) -> str:
     return os.path.join(dirname, "bsmem_%d_%s.fits" % (iteration, stem))
 
 
-def run_bsmem(args: Sequence[str], fullstdout: str = None) -> None:
+def run_bsmem(args: Sequence[str], fullstdout: Optional[str] = None) -> None:
     """Run bsmem as subprocess and log result.
 
     Args:
@@ -63,9 +63,9 @@ def run_bsmem_using_model(
     dim: int,
     modeltype: int,
     modelwidth: float,
-    pixelsize: float = None,
-    uvmax: float = None,
-    alpha: float = None,
+    pixelsize: Optional[float] = None,
+    uvmax: Optional[float] = None,
+    alpha: Optional[float] = None,
 ) -> None:
     """Run bsmem using initial/prior model.
 
@@ -108,8 +108,8 @@ def run_bsmem_using_image(
     dim: int,
     pixelsize: float,
     imagehdu: fits.PrimaryHDU,
-    uvmax: float = None,
-    alpha: float = None,
+    uvmax: Optional[float] = None,
+    alpha: Optional[float] = None,
 ) -> None:
     """Run bsmem using initial/prior image.
 
@@ -149,12 +149,12 @@ def run_bsmem_using_image(
 
 def reconst_grey_basic(
     datafile: str,
-    pixelsize: float = None,
+    pixelsize: Optional[float] = None,
     dim: int = DEFAULT_DIM,
     modeltype: int = DEFAULT_MT,
     modelwidth: float = DEFAULT_MW,
-    uvmax: float = None,
-    alpha: float = None,
+    uvmax: Optional[float] = None,
+    alpha: Optional[float] = None,
 ) -> str:
     """Reconstruct a grey image by running bsmem once.
 
@@ -186,7 +186,10 @@ def reconst_grey_basic(
 
 
 def reconst_grey_basic_using_image(
-    datafile: str, imagefile: str, uvmax: float = None, alpha: float = None
+    datafile: str,
+    imagefile: str,
+    uvmax: Optional[float] = None,
+    alpha: Optional[float] = None,
 ) -> str:
     """Reconstruct a grey image by running bsmem once using a prior image.
 
@@ -218,7 +221,7 @@ def reconst_grey_2step(
     modeltype: int = DEFAULT_MT,
     modelwidth: float = DEFAULT_MW,
     uvmax1: float = 1.1e8,
-    alpha: float = None,
+    alpha: Optional[float] = None,
     fwhm: float = 1.25,
     threshold: float = 0.05,
 ) -> str:
@@ -262,7 +265,7 @@ def reconst_grey_2step_using_image(
     datafile: str,
     imagefile: str,
     uvmax1: float = 1.1e8,
-    alpha: float = None,
+    alpha: Optional[float] = None,
     fwhm: float = 1.25,
     threshold: float = 0.05,
 ) -> str:
