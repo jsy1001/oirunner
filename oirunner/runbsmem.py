@@ -28,7 +28,7 @@ DEFAULT_MW = 10.0
 def _get_outputfile(datafile: str, iteration: int) -> str:
     dirname, basename = os.path.split(datafile)
     stem = os.path.splitext(basename)[0]
-    return os.path.join(dirname, "bsmem_%d_%s.fits" % (iteration, stem))
+    return os.path.join(dirname, f"bsmem_{iteration}_{stem}.fits")
 
 
 def run_bsmem(args: Sequence[str], fullstdout: Optional[str] = None) -> None:
@@ -47,12 +47,11 @@ def run_bsmem(args: Sequence[str], fullstdout: Optional[str] = None) -> None:
             with open(fullstdout, "w") as f:
                 f.write(out)
         result = "Iteration" + out.split("Iteration")[-1]
-        logging.info("Last iteration:\n%s" % result)
+        logging.info(f"Last iteration:\n{result}")
     except CalledProcessError as e:
         # log output from bsmem process
         logging.exception(
-            "bsmem failed:\n%s\n%s"
-            % (e.stderr.decode("utf-8"), e.stdout.decode("utf-8"))
+            f"bsmem failed:\n{e.stderr.decode('utf-8')}\n{e.stdout.decode('utf-8')}"
         )
         raise
 
@@ -85,21 +84,21 @@ def run_bsmem_using_model(
     args = [
         BSMEM,
         "--noui",
-        "--data=%s" % datafile,
         "--clobber",
-        "--output=%s" % outputfile,
-        "--dim=%d" % dim,
-        "--mt=%d" % modeltype,
-        "--mw=%f" % modelwidth,
+        f"--data={datafile}",
+        f"--output={outputfile}",
+        f"--dim={dim}",
+        f"--mt={modeltype}",
+        f"--mw={modelwidth}",
     ]
     if pixelsize is not None:
-        args += ["--pixelsize=%f" % pixelsize]
+        args += [f"--pixelsize={pixelsize}"]
     if wav is not None:
-        args += ["--wavmin=%f" % wav[0], "--wavmax=%f" % wav[1]]
+        args += [f"--wavmin={wav[0]}", f"--wavmax={wav[1]}"]
     if uvmax is not None:
-        args += ["--uvmax=%f" % uvmax]
+        args += [f"--uvmax={uvmax}"]
     if alpha is not None:
-        args += ["--autoalpha=3", "--alpha=%f" % alpha]
+        args += ["--autoalpha=3", f"--alpha={alpha}"]
     else:
         args += ["--autoalpha=4"]
     fullstdout = os.path.splitext(outputfile)[0] + "-out.txt"
@@ -135,19 +134,19 @@ def run_bsmem_using_image(
     args = [
         BSMEM,
         "--noui",
-        "--data=%s" % datafile,
         "--clobber",
-        "--output=%s" % outputfile,
-        "--dim=%d" % dim,
-        "--pixelsize=%f" % pixelsize,
-        "--sf=%s" % tempimage.name,
+        f"--data={datafile}",
+        f"--output={outputfile}",
+        f"--dim={dim}",
+        f"--pixelsize={pixelsize}",
+        f"--sf={tempimage.name}",
     ]
     if wav is not None:
-        args += ["--wavmin=%f" % wav[0], "--wavmax=%f" % wav[1]]
+        args += [f"--wavmin={wav[0]}", f"--wavmax={wav[1]}"]
     if uvmax is not None:
-        args += ["--uvmax=%f" % uvmax]
+        args += [f"--uvmax={uvmax}"]
     if alpha is not None:
-        args += ["--autoalpha=3", "--alpha=%f" % alpha]
+        args += ["--autoalpha=3", f"--alpha={alpha}"]
     else:
         args += ["--autoalpha=4"]
     fullstdout = os.path.splitext(outputfile)[0] + "-out.txt"
