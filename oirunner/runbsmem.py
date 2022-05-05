@@ -25,10 +25,16 @@ DEFAULT_MT = 3
 DEFAULT_MW = 10.0
 
 
-def _get_outputfile(datafile: str, iteration: int) -> str:
+def _get_outputfile(
+    datafile: str, iteration: int, wav: Optional[Tuple[float, float]]
+) -> str:
     dirname, basename = os.path.split(datafile)
-    stem = os.path.splitext(basename)[0]
-    return os.path.join(dirname, f"bsmem_{iteration}_{stem}.fits")
+    stem, _ = os.path.splitext(basename)
+    if wav is None:
+        return os.path.join(dirname, f"bsmem_{iteration}_{stem}.fits")
+    else:
+        meanwav = int((wav[0] + wav[1]) / 2)
+        return os.path.join(dirname, f"bsmem_{iteration}_{stem}_{meanwav}nm.fits")
 
 
 def run_bsmem(args: Sequence[str], fullstdout: Optional[str] = None) -> None:
@@ -180,7 +186,7 @@ def reconst_grey_basic(
        Output FITS filename.
 
     """
-    outputfile = _get_outputfile(datafile, 1)
+    outputfile = _get_outputfile(datafile, 1, wav)
     run_bsmem_using_model(
         datafile,
         outputfile,
@@ -215,7 +221,7 @@ def reconst_grey_basic_using_image(
        Output FITS filename.
 
     """
-    outputfile = _get_outputfile(datafile, 1)
+    outputfile = _get_outputfile(datafile, 1, wav)
     with fits.open(imagefile) as hdulist:
         imagehdu = hdulist[0]
         dim = imagehdu.data.shape[0]
@@ -264,7 +270,7 @@ def reconst_grey_2step(
 
     """
     # TODO: intelligent defaults for uvmax1, fwhm?
-    out1file = _get_outputfile(datafile, 1)
+    out1file = _get_outputfile(datafile, 1, wav)
     run_bsmem_using_model(
         datafile,
         out1file,
@@ -278,7 +284,7 @@ def reconst_grey_2step(
     )
     with fits.open(out1file) as hdulist:
         imagehdu = makesf(hdulist[0], fwhm, threshold)
-    out2file = _get_outputfile(datafile, 2)
+    out2file = _get_outputfile(datafile, 2, wav)
     run_bsmem_using_image(
         datafile, out2file, dim, pixelsize, imagehdu, wav=wav, alpha=alpha
     )
@@ -309,7 +315,7 @@ def reconst_grey_2step_using_image(
        Output FITS filename.
 
     """
-    out1file = _get_outputfile(datafile, 1)
+    out1file = _get_outputfile(datafile, 1, wav)
     with fits.open(imagefile) as hdulist:
         image1hdu = hdulist[0]
         dim = image1hdu.data.shape[0]
@@ -324,7 +330,7 @@ def reconst_grey_2step_using_image(
             uvmax=uvmax1,
             alpha=alpha,
         )
-    out2file = _get_outputfile(datafile, 2)
+    out2file = _get_outputfile(datafile, 2, wav)
     with fits.open(out1file) as hdulist:
         image2hdu = makesf(hdulist[0], fwhm, threshold)
         run_bsmem_using_image(
