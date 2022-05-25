@@ -31,6 +31,8 @@ class RunBsmemTestCase(unittest.TestCase):
             self.assertTrue(os.path.exists(out))
             out = runbs.reconst_grey_basic(tempdatafile, uvmax=1.1e8)
             self.assertTrue(os.path.exists(out))
+            out = runbs.reconst_grey_basic(tempdatafile, use_t3="phi")
+            self.assertTrue(os.path.exists(out))
             out = runbs.reconst_grey_basic(tempdatafile, alpha=4000.0)
             self.assertTrue(os.path.exists(out))
             out = runbs.reconst_grey_basic(
@@ -38,6 +40,7 @@ class RunBsmemTestCase(unittest.TestCase):
                 pixelsize=0.25,
                 wav=(500.0, 600.0),
                 uvmax=1.1e8,
+                use_t3="phi",
                 alpha=4000.0,
             )
             self.assertTrue(os.path.exists(out))
@@ -57,13 +60,21 @@ class RunBsmemTestCase(unittest.TestCase):
             out = runbs.reconst_grey_basic_using_image(
                 tempdatafile, IMAGEFILE, uvmax=1.1e8
             )
+            out = runbs.reconst_grey_basic_using_image(
+                tempdatafile, IMAGEFILE, use_t3="phi"
+            )
             self.assertTrue(os.path.exists(out))
             out = runbs.reconst_grey_basic_using_image(
                 tempdatafile, IMAGEFILE, alpha=4000.0
             )
             self.assertTrue(os.path.exists(out))
             out = runbs.reconst_grey_basic_using_image(
-                tempdatafile, IMAGEFILE, wav=(500.0, 600.0), uvmax=1.1e8, alpha=4000.0
+                tempdatafile,
+                IMAGEFILE,
+                wav=(500.0, 600.0),
+                uvmax=1.1e8,
+                use_t3="phi",
+                alpha=4000.0,
             )
             self.assertTrue(os.path.exists(out))
 
