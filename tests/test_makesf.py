@@ -43,7 +43,7 @@ class MakesfTestCase(unittest.TestCase):
         """Test '--version' argument"""
         with self.assertRaises(SystemExit) as cm:
             self.parser.parse_args(["--version"])
-            self.assertEqual(cm.exception.code, 0)
+        self.assertEqual(cm.exception.code, 0)
 
     def test_makeimage(self):
         """Test image blur and threshold"""
