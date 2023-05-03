@@ -73,6 +73,7 @@ def run_bsmem_using_model(
     uvmax: Optional[float] = None,
     use_t3: str = "all",
     alpha: Optional[float] = None,
+    flux: Optional[float] = None,
 ) -> None:
     """Run bsmem using initial/prior model.
 
@@ -88,6 +89,7 @@ def run_bsmem_using_model(
       use_t3:     Bispectrum data to use if any (possible values="all", "none",
                   "amp", "phi")
       alpha:      Regularization hyperparameter.
+      flux:       Assumed total flux.
 
     """
     args = [
@@ -111,6 +113,8 @@ def run_bsmem_using_model(
         args += ["--autoalpha=3", f"--alpha={alpha}"]
     else:
         args += ["--autoalpha=4"]
+    if flux is not None:
+        args += [f"--flux={flux}"]
     fullstdout = os.path.splitext(outputfile)[0] + "-out.txt"
     run_bsmem(args, fullstdout)
 
@@ -125,6 +129,7 @@ def run_bsmem_using_image(
     uvmax: Optional[float] = None,
     use_t3: str = "all",
     alpha: Optional[float] = None,
+    flux: Optional[float] = None,
 ) -> None:
     """Run bsmem using initial/prior image.
 
@@ -139,6 +144,7 @@ def run_bsmem_using_image(
       use_t3:     Bispectrum data to use if any (possible values="all", "none",
                   "amp", "phi")
       alpha:      Regularization hyperparameter.
+      flux:       Assumed total flux.
 
     """
     tempimage = tempfile.NamedTemporaryFile(suffix=".fits", mode="wb", delete=False)
@@ -163,6 +169,8 @@ def run_bsmem_using_image(
         args += ["--autoalpha=3", f"--alpha={alpha}"]
     else:
         args += ["--autoalpha=4"]
+    if flux is not None:
+        args += [f"--flux={flux}"]
     fullstdout = os.path.splitext(outputfile)[0] + "-out.txt"
     run_bsmem(args, fullstdout)
     os.remove(tempimage.name)
@@ -178,6 +186,7 @@ def reconst_grey_basic(
     uvmax: Optional[float] = None,
     use_t3: str = "all",
     alpha: Optional[float] = None,
+    flux: Optional[float] = None,
 ) -> str:
     """Reconstruct a grey image by running bsmem once.
 
@@ -192,6 +201,7 @@ def reconst_grey_basic(
       use_t3:     Bispectrum data to use if any (possible values="all", "none",
                   "amp", "phi")
       alpha:      Regularization hyperparameter.
+      flux:       Assumed total flux.
 
     Returns:
        Output FITS filename.
@@ -209,6 +219,7 @@ def reconst_grey_basic(
         uvmax=uvmax,
         use_t3=use_t3,
         alpha=alpha,
+        flux=flux,
     )
     return outputfile
 
@@ -220,6 +231,7 @@ def reconst_grey_basic_using_image(
     uvmax: Optional[float] = None,
     use_t3: str = "all",
     alpha: Optional[float] = None,
+    flux: Optional[float] = None,
 ) -> str:
     """Reconstruct a grey image by running bsmem once using a prior image.
 
@@ -231,6 +243,7 @@ def reconst_grey_basic_using_image(
       use_t3:     Bispectrum data to use if any (possible values="all", "none",
                   "amp", "phi")
       alpha:      Regularization hyperparameter.
+      flux:       Assumed total flux.
 
     Returns:
        Output FITS filename.
@@ -251,6 +264,7 @@ def reconst_grey_basic_using_image(
             uvmax=uvmax,
             use_t3=use_t3,
             alpha=alpha,
+            flux=flux,
         )
     return outputfile
 
@@ -265,6 +279,7 @@ def reconst_grey_2step(
     uvmax1: float = 1.1e8,
     use_t3: str = "all",
     alpha: Optional[float] = None,
+    flux: Optional[float] = None,
     fwhm: float = 1.25,
     threshold: float = 0.05,
 ) -> str:
@@ -281,6 +296,7 @@ def reconst_grey_2step(
       use_t3:     Bispectrum data to use if any (possible values="all", "none",
                   "amp", "phi")
       alpha:      Regularization hyperparameter for both runs.
+      flux:       Assumed total flux.
       fwhm:       FWHM of Gaussian to convolve 1st run output with (mas).
       threshold:  Threshold (relative to peak) to apply to 1st run output.
 
@@ -301,6 +317,7 @@ def reconst_grey_2step(
         uvmax=uvmax1,
         use_t3=use_t3,
         alpha=alpha,
+        flux=flux,
     )
     with fits.open(out1file) as hdulist:
         imagehdu = makesf(hdulist[0], fwhm, threshold)
@@ -314,6 +331,7 @@ def reconst_grey_2step(
         wav=wav,
         use_t3=use_t3,
         alpha=alpha,
+        flux=flux,
     )
     return out2file
 
@@ -325,6 +343,7 @@ def reconst_grey_2step_using_image(
     uvmax1: float = 1.1e8,
     use_t3: str = "all",
     alpha: Optional[float] = None,
+    flux: Optional[float] = None,
     fwhm: float = 1.25,
     threshold: float = 0.05,
 ) -> str:
@@ -338,6 +357,7 @@ def reconst_grey_2step_using_image(
       use_t3:     Bispectrum data to use if any (possible values="all", "none",
                   "amp", "phi")
       alpha:      Regularization hyperparameter for both runs.
+      flux:       Assumed total flux.
       fwhm:       FWHM of Gaussian to convolve 1st run output with (mas).
       threshold:  Threshold (relative to peak) to apply to 1st run output.
 
@@ -360,6 +380,7 @@ def reconst_grey_2step_using_image(
             uvmax=uvmax1,
             use_t3=use_t3,
             alpha=alpha,
+            flux=flux,
         )
     out2file = _get_outputfile(datafile, 2, wav)
     with fits.open(out1file) as hdulist:
@@ -373,5 +394,6 @@ def reconst_grey_2step_using_image(
             wav=wav,
             use_t3=use_t3,
             alpha=alpha,
+            flux=flux,
         )
     return out2file
