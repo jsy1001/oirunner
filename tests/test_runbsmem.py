@@ -35,7 +35,7 @@ class RunBsmemTestCase(unittest.TestCase):
             self.assertTrue(os.path.exists(out))
             out = runbs.reconst_grey_basic(tempdatafile, alpha=4000.0)
             self.assertTrue(os.path.exists(out))
-            out = runbs.reconst_grey_basic(tempdatafile, flux=0.95)
+            out = runbs.reconst_grey_basic(tempdatafile, flux=0.99)
             self.assertTrue(os.path.exists(out))
             out = runbs.reconst_grey_basic(
                 tempdatafile,
