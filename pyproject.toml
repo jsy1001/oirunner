@@ -1,1 +1,40 @@
+[build-system]
+requires = ["setuptools>=45", "setuptools-scm[toml]>=6.2"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "oirunner"
+dynamic = ["version"]
+authors = [
+        {name = "John Young", email = "jsy1001@cam.ac.uk"},
+]
+description = "Tool to reconstruct images from optint data using BSMEM"
+readme = "README.md"
+requires-python = ">=3.8"
+#license = {text = ""}
+classifiers = [
+            "Intended Audience :: Science/Research",
+            "Programming Language :: Python :: 3",
+            "Programming Language :: Python :: 3.8",
+            "Programming Language :: Python :: 3.9",
+            "Programming Language :: Python :: 3.10",
+]
+dependencies = [
+             "numpy",
+             "astropy",
+             "scipy",
+]
+
+# [project.optional-dependencies]
+# dev = ["pip-tools", "black", "tox"]
+
+[project.scripts]
+makesf = "oirunner.makesf.__main__:main"
+
+[project.urls]
+homepage = "https://github.com/jsy1001/oirunner/"
+repository = "https://github.com/jsy1001/oirunner.git"
+
+[tool.setuptools_scm]
+
 [tool.black]
