@@ -1,14 +1,14 @@
-.PHONY: requirements update-deps install pip-tools touch
+.PHONY: requirements update-deps install-dev pip-tools touch
 
-PREREQS = requirements-dev.in pyproject.toml
-TARGETS = requirements-dev.txt requirements.txt
+PREREQS = pyproject.toml
+TARGETS = requirements.txt dev-requirements.txt
 
 requirements: pip-tools $(TARGETS)
 
 update-deps: pip-tools touch $(TARGETS)
 
-install: pip-tools $(TARGETS)
-	pip-sync $(TARGETS)
+install-dev: pip-tools $(TARGETS)
+	pip-sync dev-requirements.txt
 	rm -rf .tox
 
 pip-tools:
@@ -17,9 +17,10 @@ pip-tools:
 touch:
 	touch $(PREREQS)
 
-requirements-dev.txt: requirements-dev.in requirements.txt
 requirements.txt: pyproject.toml
+	pip-compile --upgrade --build-isolation --resolver=backtracking --output-file=$@ $<
+	touch $@
 
-$(TARGETS):
-	pip-compile --upgrade --build-isolation --resolver=backtracking --output-file $@ $<
+dev-requirements.txt: pyproject.toml
+	pip-compile --upgrade --build-isolation --resolver=backtracking --extra=dev --output-file=$@ $<
 	touch $@

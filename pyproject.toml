@@ -25,8 +25,8 @@ dependencies = [
              "scipy",
 ]
 
-# [project.optional-dependencies]
-# dev = ["pip-tools", "black", "tox"]
+[project.optional-dependencies]
+dev = ["pip-tools", "black", "tox"]
 
 [project.scripts]
 makesf = "oirunner.makesf.__main__:main"
