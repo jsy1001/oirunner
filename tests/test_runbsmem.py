@@ -7,7 +7,7 @@ from subprocess import CalledProcessError, run
 try:
     run(["bsmem", "-V"])
     HAVE_BSMEM = True
-except (OSError, CalledProcessError):
+except (CalledProcessError, OSError):
     HAVE_BSMEM = False
 
 import oirunner.runbsmem as runbs

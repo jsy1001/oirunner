@@ -36,3 +36,14 @@ repository = "https://github.com/jsy1001/oirunner.git"
 [tool.setuptools_scm]
 
 [tool.black]
+
+[tool.coverage.run]
+source = ["oirunner"]
+# omit = ["*/__init__.py"]
+command_line = "-m unittest discover"
+
+[tool.mypy]
+python_version = "3.8"
+warn_unused_configs = true
+packages = ["oirunner", "tests"]
+ignore_missing_imports = true
