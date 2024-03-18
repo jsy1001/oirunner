@@ -4,7 +4,7 @@
 #
 #    pip-compile --output-file=requirements.txt --resolver=backtracking pyproject.toml
 #
-astropy==5.2.2
+astropy==5.3.3
     # via oirunner (pyproject.toml)
 numpy==1.24.3
     # via

@@ -4,7 +4,7 @@
 #
 #    pip-compile --extra=dev --output-file=dev-requirements.txt --resolver=backtracking pyproject.toml
 #
-astropy==5.2.2
+astropy==5.3.3
     # via oirunner (pyproject.toml)
 black==23.3.0
     # via oirunner (pyproject.toml)
