@@ -6,7 +6,7 @@
 #
 astropy==5.2.2
     # via oirunner (pyproject.toml)
-black==23.3.0
+black==24.3.0
     # via oirunner (pyproject.toml)
 build==0.10.0
     # via pip-tools
