@@ -76,6 +76,10 @@ def run_bsmem_using_model(
     flux: Optional[float] = None,
     v2a: Optional[float] = None,
     v2b: Optional[float] = None,
+    t3ampa: Optional[float] = None,
+    t3ampb: Optional[float] = None,
+    t3phia: Optional[float] = None,
+    t3phib: Optional[float] = None,
 ) -> None:
     """Run bsmem using initial/prior model.
 
@@ -94,6 +98,10 @@ def run_bsmem_using_model(
       flux:       Assumed total flux.
       v2a:        Multiplicative factor a for powerspectrum errors (e'= a * e + b)
       v2b:        Additive offset b for powerspectrum errors (e'= a * e + b)
+      t3ampa:     Multiplicative factor a for triple amplitude errors (e'= a * e + b)
+      t3ampb:     Additive offset b for triple amplitude errors (e'= a * e + b)
+      t3phia:     Multiplicative factor a for closure phase errors (e'= a * e + b)
+      t3phib:     Additive offset b for closure phase errors (e'= a * e + b)
 
     """
     args = [
@@ -123,6 +131,14 @@ def run_bsmem_using_model(
         args += [f"--v2a={v2a}"]
     if v2b is not None:
         args += [f"--v2b={v2b}"]
+    if t3ampa is not None:
+        args += [f"--t3ampa={t3ampa}"]
+    if t3ampb is not None:
+        args += [f"--t3ampb={t3ampb}"]
+    if t3phia is not None:
+        args += [f"--t3phia={t3phia}"]
+    if t3phib is not None:
+        args += [f"--t3phib={t3phib}"]
     fullstdout = os.path.splitext(outputfile)[0] + "-out.txt"
     run_bsmem(args, fullstdout)
 
@@ -140,6 +156,10 @@ def run_bsmem_using_image(
     flux: Optional[float] = None,
     v2a: Optional[float] = None,
     v2b: Optional[float] = None,
+    t3ampa: Optional[float] = None,
+    t3ampb: Optional[float] = None,
+    t3phia: Optional[float] = None,
+    t3phib: Optional[float] = None,
 ) -> None:
     """Run bsmem using initial/prior image.
 
@@ -157,6 +177,10 @@ def run_bsmem_using_image(
       flux:       Assumed total flux.
       v2a:        Multiplicative factor a for powerspectrum errors (e'= a * e + b)
       v2b:        Additive offset b for powerspectrum errors (e'= a * e + b)
+      t3ampa:     Multiplicative factor a for triple amplitude errors (e'= a * e + b)
+      t3ampb:     Additive offset b for triple amplitude errors (e'= a * e + b)
+      t3phia:     Multiplicative factor a for closure phase errors (e'= a * e + b)
+      t3phib:     Additive offset b for closure phase errors (e'= a * e + b)
 
     """
     tempimage = tempfile.NamedTemporaryFile(suffix=".fits", mode="wb", delete=False)
@@ -187,6 +211,14 @@ def run_bsmem_using_image(
         args += [f"--v2a={v2a}"]
     if v2b is not None:
         args += [f"--v2b={v2b}"]
+    if t3ampa is not None:
+        args += [f"--t3ampa={t3ampa}"]
+    if t3ampb is not None:
+        args += [f"--t3ampb={t3ampb}"]
+    if t3phia is not None:
+        args += [f"--t3phia={t3phia}"]
+    if t3phib is not None:
+        args += [f"--t3phib={t3phib}"]
     fullstdout = os.path.splitext(outputfile)[0] + "-out.txt"
     run_bsmem(args, fullstdout)
     os.remove(tempimage.name)

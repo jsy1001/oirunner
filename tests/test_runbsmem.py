@@ -41,6 +41,14 @@ class RunBsmemTestCase(unittest.TestCase):
             self.assertTrue(os.path.exists(out))
             out = runbs.reconst_grey_basic(tempdatafile, v2b=0.02)
             self.assertTrue(os.path.exists(out))
+            out = runbs.reconst_grey_basic(tempdatafile, t3ampa=1.01)
+            self.assertTrue(os.path.exists(out))
+            out = runbs.reconst_grey_basic(tempdatafile, t3ampb=0.01)
+            self.assertTrue(os.path.exists(out))
+            out = runbs.reconst_grey_basic(tempdatafile, t3phia=1.01)
+            self.assertTrue(os.path.exists(out))
+            out = runbs.reconst_grey_basic(tempdatafile, t3phib=0.01)
+            self.assertTrue(os.path.exists(out))
             out = runbs.reconst_grey_basic(
                 tempdatafile,
                 pixelsize=0.25,
@@ -51,6 +59,8 @@ class RunBsmemTestCase(unittest.TestCase):
                 flux=0.95,
                 v2a=1.02,
                 v2b=0.02,
+                t3phia=1.01,
+                t3phib=0.01,
             )
             self.assertTrue(os.path.exists(out))
 
@@ -89,6 +99,22 @@ class RunBsmemTestCase(unittest.TestCase):
             )
             self.assertTrue(os.path.exists(out))
             out = runbs.reconst_grey_basic_using_image(
+                tempdatafile, IMAGEFILE, t3ampa=1.01
+            )
+            self.assertTrue(os.path.exists(out))
+            out = runbs.reconst_grey_basic_using_image(
+                tempdatafile, IMAGEFILE, t3ampb=0.01
+            )
+            self.assertTrue(os.path.exists(out))
+            out = runbs.reconst_grey_basic_using_image(
+                tempdatafile, IMAGEFILE, t3phia=1.01
+            )
+            self.assertTrue(os.path.exists(out))
+            out = runbs.reconst_grey_basic_using_image(
+                tempdatafile, IMAGEFILE, t3phib=0.01
+            )
+            self.assertTrue(os.path.exists(out))
+            out = runbs.reconst_grey_basic_using_image(
                 tempdatafile,
                 IMAGEFILE,
                 wav=(500.0, 600.0),
@@ -98,6 +124,8 @@ class RunBsmemTestCase(unittest.TestCase):
                 flux=0.95,
                 v2a=1.02,
                 v2b=0.02,
+                t3phia=1.01,
+                t3phib=0.01,
             )
             self.assertTrue(os.path.exists(out))
 
