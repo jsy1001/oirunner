@@ -18,9 +18,9 @@ touch:
 	touch $(PREREQS)
 
 requirements.txt: pyproject.toml
-	pip-compile --upgrade --build-isolation --resolver=backtracking --output-file=$@ $<
+	pip-compile --upgrade --build-isolation --resolver=backtracking --strip-extras --output-file=$@ $<
 	touch $@
 
 dev-requirements.txt: pyproject.toml
-	pip-compile --upgrade --build-isolation --resolver=backtracking --extra=dev --output-file=$@ $<
+	pip-compile --upgrade --build-isolation --resolver=backtracking --strip-extras --extra=dev --output-file=$@ $<
 	touch $@
