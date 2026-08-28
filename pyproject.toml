@@ -19,7 +19,6 @@ dependencies = ["numpy", "astropy", "scipy"]
 
 [project.optional-dependencies]
 dev = [
-    "pip-tools",
     "tox",
     "tox-uv",
     "black",
