@@ -6,7 +6,6 @@ Attributes:
 """
 
 import logging
-from typing import Union
 
 from astropy import wcs
 from astropy.io import fits
@@ -18,7 +17,7 @@ import scipy.signal
 MAS_TO_DEG = 1 / 3600 / 1000
 
 
-def get_pixelsize(imagehdu: Union[fits.PrimaryHDU, fits.ImageHDU]) -> float:
+def get_pixelsize(imagehdu: fits.PrimaryHDU | fits.ImageHDU) -> float:
     """Return image pixel size in milliarcseconds."""
     try:
         cdelt1 = imagehdu.header["CDELT1"]
@@ -33,7 +32,7 @@ def get_pixelsize(imagehdu: Union[fits.PrimaryHDU, fits.ImageHDU]) -> float:
 
 
 def makesf(
-    imagehdu: Union[fits.PrimaryHDU, fits.ImageHDU],
+    imagehdu: fits.PrimaryHDU | fits.ImageHDU,
     fwhm: float,
     threshold: float,
     blank: float = 1e-8,

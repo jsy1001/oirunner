@@ -1,7 +1,7 @@
 """Make initial/prior model image for BSMEM.
 
 Attributes:
-  COPY_KEYWORDS (List[str]): FITS header keywords copied from input file.
+  COPY_KEYWORDS (list[str]): FITS header keywords copied from input file.
 
 """
 

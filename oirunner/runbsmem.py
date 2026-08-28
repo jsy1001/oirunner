@@ -12,7 +12,7 @@ import logging
 import os
 import tempfile
 from subprocess import CalledProcessError, PIPE, run
-from typing import Optional, Sequence, Tuple
+from typing import Sequence
 
 from astropy.io import fits
 
@@ -25,7 +25,7 @@ DEFAULT_MW = 10.0
 
 
 def _get_outputfile(
-    datafile: str, iteration: int, wav: Optional[Tuple[float, float]]
+    datafile: str, iteration: int, wav: tuple[float, float] | None
 ) -> str:
     dirname, basename = os.path.split(datafile)
     stem, _ = os.path.splitext(basename)
@@ -36,7 +36,7 @@ def _get_outputfile(
         return os.path.join(dirname, f"bsmem_{iteration}_{stem}_{meanwav}nm.fits")
 
 
-def run_bsmem(args: Sequence[str], fullstdout: Optional[str] = None) -> None:
+def run_bsmem(args: Sequence[str], fullstdout: str | None = None) -> None:
     """Run bsmem as subprocess and log result.
 
     Args:
@@ -67,18 +67,18 @@ def run_bsmem_using_model(
     dim: int,
     modeltype: int,
     modelwidth: float,
-    pixelsize: Optional[float] = None,
-    wav: Optional[Tuple[float, float]] = None,
-    uvmax: Optional[float] = None,
+    pixelsize: float | None = None,
+    wav: tuple[float, float] | None = None,
+    uvmax: float | None = None,
     use_t3: str = "all",
-    alpha: Optional[float] = None,
-    flux: Optional[float] = None,
-    v2a: Optional[float] = None,
-    v2b: Optional[float] = None,
-    t3ampa: Optional[float] = None,
-    t3ampb: Optional[float] = None,
-    t3phia: Optional[float] = None,
-    t3phib: Optional[float] = None,
+    alpha: float | None = None,
+    flux: float | None = None,
+    v2a: float | None = None,
+    v2b: float | None = None,
+    t3ampa: float | None = None,
+    t3ampb: float | None = None,
+    t3phia: float | None = None,
+    t3phib: float | None = None,
 ) -> None:
     """Run bsmem using initial/prior model.
 
@@ -148,17 +148,17 @@ def run_bsmem_using_image(
     dim: int,
     pixelsize: float,
     imagehdu: fits.PrimaryHDU,
-    wav: Optional[Tuple[float, float]] = None,
-    uvmax: Optional[float] = None,
+    wav: tuple[float, float] | None = None,
+    uvmax: float | None = None,
     use_t3: str = "all",
-    alpha: Optional[float] = None,
-    flux: Optional[float] = None,
-    v2a: Optional[float] = None,
-    v2b: Optional[float] = None,
-    t3ampa: Optional[float] = None,
-    t3ampb: Optional[float] = None,
-    t3phia: Optional[float] = None,
-    t3phib: Optional[float] = None,
+    alpha: float | None = None,
+    flux: float | None = None,
+    v2a: float | None = None,
+    v2b: float | None = None,
+    t3ampa: float | None = None,
+    t3ampb: float | None = None,
+    t3phia: float | None = None,
+    t3phib: float | None = None,
 ) -> None:
     """Run bsmem using initial/prior image.
 
@@ -225,11 +225,11 @@ def run_bsmem_using_image(
 
 def reconst_grey_basic(
     datafile: str,
-    pixelsize: Optional[float] = None,
+    pixelsize: float | None = None,
     dim: int = DEFAULT_DIM,
     modeltype: int = DEFAULT_MT,
     modelwidth: float = DEFAULT_MW,
-    wav: Optional[Tuple[float, float]] = None,
+    wav: tuple[float, float] | None = None,
     **kwargs,
 ) -> str:
     """Reconstruct a grey image by running bsmem once.
@@ -265,7 +265,7 @@ def reconst_grey_basic(
 def reconst_grey_basic_using_image(
     datafile: str,
     imagefile: str,
-    wav: Optional[Tuple[float, float]] = None,
+    wav: tuple[float, float] | None = None,
     **kwargs,
 ) -> str:
     """Reconstruct a grey image by running bsmem once using a prior image.
@@ -304,7 +304,7 @@ def reconst_grey_2step(
     dim: int = DEFAULT_DIM,
     modeltype: int = DEFAULT_MT,
     modelwidth: float = DEFAULT_MW,
-    wav: Optional[Tuple[float, float]] = None,
+    wav: tuple[float, float] | None = None,
     uvmax1: float = 1.1e8,
     fwhm: float = 1.25,
     threshold: float = 0.05,
@@ -360,7 +360,7 @@ def reconst_grey_2step(
 def reconst_grey_2step_using_image(
     datafile: str,
     imagefile: str,
-    wav: Optional[Tuple[float, float]] = None,
+    wav: tuple[float, float] | None = None,
     uvmax1: float = 1.1e8,
     fwhm: float = 1.25,
     threshold: float = 0.05,
