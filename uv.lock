@@ -720,7 +720,7 @@ dependencies = [
     { name = "scipy", version = "1.18.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.12'" },
 ]
 
-[package.optional-dependencies]
+[package.dev-dependencies]
 dev = [
     { name = "black" },
     { name = "coverage", extra = ["toml"] },
@@ -737,20 +737,23 @@ dev = [
 [package.metadata]
 requires-dist = [
     { name = "astropy" },
-    { name = "black", marker = "extra == 'dev'" },
-    { name = "coverage", extras = ["toml"], marker = "extra == 'dev'" },
-    { name = "flake8", marker = "extra == 'dev'" },
-    { name = "flake8-alphabetize", marker = "extra == 'dev'" },
-    { name = "flake8-assertive", marker = "extra == 'dev'" },
-    { name = "flake8-docstrings", marker = "extra == 'dev'" },
-    { name = "mypy", marker = "extra == 'dev'" },
     { name = "numpy" },
-    { name = "pep8-naming", marker = "extra == 'dev'" },
     { name = "scipy" },
-    { name = "tox", marker = "extra == 'dev'" },
-    { name = "tox-uv", marker = "extra == 'dev'" },
 ]
-provides-extras = ["dev"]
+
+[package.metadata.requires-dev]
+dev = [
+    { name = "black" },
+    { name = "coverage", extras = ["toml"] },
+    { name = "flake8" },
+    { name = "flake8-alphabetize" },
+    { name = "flake8-assertive" },
+    { name = "flake8-docstrings" },
+    { name = "mypy" },
+    { name = "pep8-naming" },
+    { name = "tox" },
+    { name = "tox-uv" },
+]
 
 [[package]]
 name = "packaging"

@@ -17,7 +17,7 @@ classifiers = [
 ]
 dependencies = ["numpy", "astropy", "scipy"]
 
-[project.optional-dependencies]
+[dependency-groups]
 dev = [
     "tox",
     "tox-uv",

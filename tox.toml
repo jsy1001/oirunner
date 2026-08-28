@@ -11,7 +11,7 @@ env_list = [
 [env_run_base]
 runner = "uv-venv-lock-runner"
 depends = ["clean"]
-extras = ["dev"]
+dependency_groups = ["dev"]
 commands = [["coverage", "run", "--parallel-mode"]]
 
 [env.flake8]
