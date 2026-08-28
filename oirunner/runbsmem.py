@@ -18,7 +18,6 @@ from astropy.io import fits
 
 from .priorimage import get_pixelsize, makesf
 
-
 BSMEM = "bsmem"
 DEFAULT_DIM = 128
 DEFAULT_MT = 3
