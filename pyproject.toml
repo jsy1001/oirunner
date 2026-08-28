@@ -5,26 +5,32 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "oirunner"
 dynamic = ["version"]
-authors = [
-        {name = "John Young", email = "jsy1001@cam.ac.uk"},
-]
+authors = [{ name = "John Young", email = "jsy1001@cam.ac.uk" }]
 description = "Tool to reconstruct images from optint data using BSMEM"
 readme = "README.md"
 requires-python = ">=3.11"
-license = {text = "GPL-2.0-only"}
+license = { text = "GPL-2.0-only" }
 classifiers = [
-            "Development Status :: 5 - Production/Stable",
-            "Intended Audience :: Science/Research",
-            "Programming Language :: Python :: 3",
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Science/Research",
+    "Programming Language :: Python :: 3",
 ]
-dependencies = [
-             "numpy",
-             "astropy",
-             "scipy",
-]
+dependencies = ["numpy", "astropy", "scipy"]
 
 [project.optional-dependencies]
-dev = ["pip-tools", "black", "tox"]
+dev = [
+    "pip-tools",
+    "tox",
+    "tox-uv",
+    "black",
+    "flake8",
+    "flake8-assertive",
+    "flake8-docstrings",
+    "flake8-alphabetize",
+    "pep8-naming",
+    "mypy",
+    "coverage[toml]",
+]
 
 [project.scripts]
 makesf = "oirunner.makesf.__main__:main"
